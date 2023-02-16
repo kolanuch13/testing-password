@@ -54,7 +54,6 @@ export class PasswordCheckComponent implements OnChanges {
   @Output() passwordStrength = new EventEmitter<boolean>();
 
   bars: string[];
-
   message = '';
   messageClassName = '';
 
@@ -92,8 +91,8 @@ export class PasswordCheckComponent implements OnChanges {
       if (typeToConfig[pwdStrength] !== undefined) {
         const config = typeToConfig[pwdStrength];
         this.setBarColors(config);
-        this.messageClassName = config.className;
-        this.message = config.message;
+        // this.messageClassName = config.className;
+        // this.message = config.message;
       } else {
         this.reset();
       }
@@ -118,10 +117,12 @@ export class PasswordCheckComponent implements OnChanges {
     this.bars = this.createBars();
   }
 
-  private setBarColors({color, amount}: { color: string; amount: number }) {
+  private setBarColors({color, amount, message, className}: { color: string; amount: number , message: string, className: string}) {
     this.reset();
     for (let i = 0; i < amount; i++) {
       this.bars[i] = color;
+      this.message = message;
+      this.messageClassName = className;
     }
   }
 }
