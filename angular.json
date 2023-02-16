@@ -2,10 +2,29 @@
   "$schema": "./node_modules/@angular/cli/lib/config/schema.json",
   "version": 1,
   "newProjectRoot": "projects",
+  "cli": {
+    "packageManager": "npm",
+    "cache": {
+      "enabled": true,
+      "environment": "all",
+      "path": "tmp/cache/.angular"
+    }
+  },
+  "schematics": {
+    "@schematics/angular:component": {
+      "changeDetection": "OnPush",
+      "viewEncapsulation": "None"
+    }
+  },
   "projects": {
     "testing-password": {
       "projectType": "application",
-      "schematics": {},
+      "schematics": {
+        "@schematics/angular:component": {
+          "style": "css",
+          "changeDetection": "Default"
+        }
+      },
       "root": "",
       "sourceRoot": "src",
       "prefix": "app",
@@ -21,9 +40,14 @@
               "zone.js"
             ],
             "tsConfig": "tsconfig.app.json",
+            "inlineStyleLanguage": "css",
             "assets": [
               "src/favicon.ico",
-              "src/assets"
+              {
+                "input": "src/assets",
+                "glob": "*.md",
+                "output": "/docs"
+              }
             ],
             "styles": [
               "src/styles.css"
