@@ -16,20 +16,28 @@ enum PasswordStrength {
 
 const typeToConfig = {
   [PasswordStrength.Short]: {
-    color: "red",
+    color: 'red',
     amount: 3,
+    message: 'Your password is too short',
+    className: 'error',
   },
   [PasswordStrength.Weak]: {
-    color: "red",
+    color: 'red',
     amount: 1,
+    message: 'Your password is too weak',
+    className: 'error',
   },
   [PasswordStrength.Medium]: {
-    color: "yellow",
+    color: 'yellow',
     amount: 2,
+    message: 'Your password is medium strenght',
+    className: 'warn',
   },
   [PasswordStrength.Strong]: {
-    color: "green",
+    color: 'green',
     amount: 3,
+    message: 'Your password is perfect!',
+    className: 'success',
   },
 };
 
@@ -41,19 +49,20 @@ const MINIMUM_LENGTH = 8;
   templateUrl: './password-check.component.html',
   styleUrls: ['./password-check.component.css'],
 })
-
 export class PasswordCheckComponent implements OnChanges {
   @Input() public passwordToCheck?: string;
   @Output() passwordStrength = new EventEmitter<boolean>();
 
   bars: string[];
 
+  message = '';
+  messageClassName = '';
+
   constructor() {
     this.bars = this.createBars();
   }
 
   private checkStrength(pass: string): PasswordStrength {
-    
     if (pass.length < MINIMUM_LENGTH) {
       return PasswordStrength.Short;
     }
@@ -79,11 +88,17 @@ export class PasswordCheckComponent implements OnChanges {
 
     if (password.length > 0) {
       const pwdStrength = this.checkStrength(password);
-      this.setBarColors(
-        typeToConfig[pwdStrength]
-      );
+
+      if (typeToConfig[pwdStrength] !== undefined) {
+        const config = typeToConfig[pwdStrength];
+        this.setBarColors(config);
+        this.messageClassName = config.className;
+        this.message = config.message;
+      } else {
+        this.reset();
+      }
     } else {
-      this.resetColors();
+      this.reset();
     }
   }
 
@@ -97,14 +112,16 @@ export class PasswordCheckComponent implements OnChanges {
     return bars;
   }
 
-  private resetColors() {
+  private reset() {
+    this.message = '';
+    this.messageClassName = '';
     this.bars = this.createBars();
   }
 
-  private setBarColors(obj: {color: string, amount: number}) {
-    this.resetColors();
-      for (let i = 0; i < obj.amount; i++) {
-        this.bars[i] = obj.color;
-      }
+  private setBarColors({color, amount}: { color: string; amount: number }) {
+    this.reset();
+    for (let i = 0; i < amount; i++) {
+      this.bars[i] = color;
+    }
   }
 }
