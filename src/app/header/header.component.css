@@ -1,0 +1,13 @@
+header {
+  padding: 3px;
+  background-color: rgb(79, 182, 230);
+  
+  display: flex;
+  justify-content: flex-start;
+  align-items: center;
+} 
+
+a {
+  color: white;
+  text-decoration: none;
+}
